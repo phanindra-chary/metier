@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+  http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<context:component-scan base-package="com.virtusa.metier.controller"/>
+
+	<!-- <context:property-placeholder location="classpath:datasource.properties" /> -->
+
+	<mvc:annotation-driven />
+	 
+	<bean id="dataSource111" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		  <property name="url" value="jdbc:mysql://localhost:3306/assessment" />  
+	<!-- 	<property name="url" value="jdbc:mysql://localhost:3306/onlineexamination" /> -->
+		<property name="username" value="root" />
+		<property name="password" value="1" />
+	</bean>
+	
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		
+		<property name="dataSource" ref="dataSource111" />
+		
+		<property name="annotatedClasses">
+	<list>
+		<value>com.virtusa.metier.model.Employee</value>
+		<value>com.virtusa.metier.model.QuestionBank</value>
+		<value>com.virtusa.metier.model.QuestionPaper</value>
+		<value>com.virtusa.metier.model.Course</value>
+		<value>com.virtusa.metier.model.Result</value>
+		<value>com.virtusa.metier.model.Assessment</value>
+		<value>com.virtusa.metier.model.Technology</value>
+		<value>com.virtusa.metier.model.AttemptAssessment</value>
+	</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<tx:annotation-driven/> 
+	
+	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="persistenceExceptionTranslationPostProcessor" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+	
+	<bean id="jspViewResolver" 	class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" 	value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/pages/" />
+		<property name="suffix" value=".jsp" />
+		
+	</bean>
+	<bean id="result" class="com.virtusa.metier.model.Result" />
+	<bean id="resultDao" class="com.virtusa.metier.dao.impl.ResultDAOImpl" />
+	<bean id="resultService" class="com.virtusa.metier.service.impl.ResultServiceImpl" />
+	<bean id="employee" class="com.virtusa.metier.model.Employee" />
+	<bean id="questionBank" class="com.virtusa.metier.model.QuestionBank" />
+	<bean id="questionPaper" class="com.virtusa.metier.model.QuestionPaper" />
+	<bean id="questionBankList" class="com.virtusa.metier.model.QuestionBankList" />
+	<bean id="employeeDao" class="com.virtusa.metier.dao.impl.EmployeeDaoImpl"/>
+	<bean id="questionDao" class="com.virtusa.metier.dao.impl.QuestionDAOImpl"/>
+	<bean id="questionService" class="com.virtusa.metier.service.impl.QuestionServiceImpl" />
+	<bean id="courseService" class="com.virtusa.metier.service.impl.CourseService" />
+	<bean id="employeeService" class="com.virtusa.metier.service.impl.EmployeeServiceImpl" />
+	<bean id="course" class="com.virtusa.metier.model.Course" />
+	<bean id="technology" scope="prototype" class="com.virtusa.metier.model.Technology"/>
+	<bean id="technologyForm" class="com.virtusa.metier.model.TechnologyForm" />
+	<bean id="assessmentForm" class="com.virtusa.metier.model.AssessmentForm" />
+	<bean id="assessment" class="com.virtusa.metier.model.Assessment"/>
+	<bean id="assessmentHelper" class="com.virtusa.metier.model.AssessmentHelper"/>
+	<bean id="assessmentDao" class="com.virtusa.metier.dao.impl.AssessmentDaoImpl" />
+	<bean id="questionPaperDao" class="com.virtusa.metier.dao.impl.QuestionPaperDAOImpl" />
+	<bean id="attemptAssessmentDao" class="com.virtusa.metier.dao.impl.AttemptAssessmentDaoImpl" />
+	<bean id="attemptAssessment" class="com.virtusa.metier.model.AttemptAssessment" />
+	<bean id="technologyDao" class="com.virtusa.metier.dao.impl.TechnologyDaoImpl" />
+	<bean id="courseDao" class="com.virtusa.metier.dao.impl.CourseDaoImpl" />
+	<bean id="readDataFromExcel" class="com.virtusa.metier.dao.impl.ReadDataFromExcel" />
+    
+     <!--   <bean id="assessmentTechnologies" class="com.virtusa.metier.model.AssessmentTechnologies" /> 
+      -->
+	<!-- <bean id="courseDao" class="com.virtusa.metier.dao.CourseDaoImpl" />
+	<bean id="courseService" class="com.virtusa.metier.service.CourseServiceImpl" />
+	<bean id="assessmentService" class="com.virtusa.metier.service.AssessmentServiceImpl" /> -->
+	 
+</beans>
